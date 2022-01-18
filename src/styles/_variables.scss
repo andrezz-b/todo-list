@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Source+Sans+Pro&display=swap');
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+
+$ff-title: 'Montserrat', sans-serif;
+$ff-text: 'Source Sans Pro', sans-serif;
+
+$clr-bg-dk: #385170;
+$clr-bg-lt: #e7eaf6;
+
+$clr-ntrl-w: #fff;
+$clr-ntrl-b: #000;
