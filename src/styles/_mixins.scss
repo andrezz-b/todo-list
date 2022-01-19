@@ -11,3 +11,9 @@
 	align-items: flex-start;
 	flex-direction: $direction;
 }
+
+@mixin subTitle {
+	font-size: 1.65em;
+	font-family: $ff-title;
+	font-weight: 400;
+}
