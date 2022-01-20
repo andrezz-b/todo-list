@@ -1,5 +1,5 @@
 @import "variables", "./reset.css", "./mixins";
-@import "mainDisplay.scss";
+@import "mainDisplay.scss", "sidebar.scss";
 
 header {
 	background-color: $clr-bg-dk;
@@ -17,69 +17,4 @@ main {
 	@include flexCenter(row);
 	height: 80%;
 	width: 100%;
-}
-
-#sidebar-display {
-	@include flexStart(column);
-	gap: 1.15rem;
-
-	border-right: 2px solid $clr-bg-dk;
-	padding: 1.75em;
-	height: 100%;
-	width: 17%;
-	min-width: 14rem;
-	background-color: $clr-bg-lt;
-	color: $clr-ntrl-b;
-}
-
-.subtitle {
-    @include subTitle;
-
-	&--project {
-		@extend.subtitle;
-		font-size: 1.1em;
-	}
-}
-
-#project-list {
-	@include flexStart(column);
-	gap: 0.5rem;
-	padding-left: 1.25rem;
-
-	.project-item {
-		cursor: pointer;
-		z-index: 10;
-		padding: 0.35em 0.5em;
-		display: grid;
-		width: 100%;
-		grid-template-columns: 1fr 0.15fr;
-		column-gap: 0.5rem;
-		align-items: center;
-		transition: 200ms ease-in;
-
-		&:hover {
-			background-color: rgba($clr-bg-dk, $alpha: 0.2);
-			border-radius: 3px;
-		}
-
-		span {
-			@include flexCenter(row);
-			cursor: pointer;
-			color: rgba($clr-ntrl-b, $alpha: 0.7);
-			height: auto;
-			transition: opacity 0.2s ease-in, transform 200ms;
-			transform-origin: center;
-
-			&:hover {
-				transform: rotate(90deg);
-				color: rgba($clr-ntrl-b, $alpha: 1);
-			}
-
-			opacity: 0;
-		}
-
-		&:hover > span {
-			opacity: 1;
-		}
-	}
 }
