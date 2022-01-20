@@ -19,10 +19,21 @@
 
 	#todo-list {
 		@include flexStart(column);
-		margin-top: 0.5rem;
-		padding: 1.5em;
+		margin-top: 1.7rem;
+		padding: 0 1.5em;
 		width: 100%;
 		row-gap: 1rem;
+		overflow: auto;
+
+		&::-webkit-scrollbar {
+			width: 0.3em;
+			border-radius: 20px;
+		}
+	
+		&::-webkit-scrollbar-thumb {
+			background-color: $clr-border-sep;
+			border-radius: 20px;
+		}
 	}
 }
 
