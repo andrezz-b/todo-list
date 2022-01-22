@@ -17,7 +17,14 @@
 				<h1 class="subtitle">This Week</h1>
 				<div class="new-project">
 					<h1 class="subtitle">Projects</h1>
-					<span><i class="fas fa-plus"></i></span>
+					<span id="project-add-btn"><i class="fas fa-plus"></i></span>
+					<form id="project-add" class="" data-open="false" action="#" autocomplete="off" onsubmit="return false">
+						<input type="text" placeholder="Project Name" />
+						<div>
+							<input type="submit" value="Add Project" />
+							<button class="cancel">Cancel</button>
+						</div>
+					</form>
 				</div>
 				<div id="project-list">
 					<div class="project-item">
