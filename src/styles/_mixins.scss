@@ -17,3 +17,60 @@
 	font-family: $ff-title;
 	font-weight: 400;
 }
+
+@mixin textInput {
+	font-family: $ff-title;
+	background-color: $clr-bg-lt;
+	border: 1px solid $clr-border-sep;
+	border-radius: 10px;
+	padding: 0.35em 0;
+	padding-left: 0.5em;
+	width: 100%;
+
+	&:focus {
+		border: 1px solid $clr-base-dk;
+		background-color: $clr-ntrl-w;
+		outline: 1px solid $clr-base-dk;
+	}
+}
+
+@mixin radioPriority($clr) {
+	appearance: none;
+	background-color: $clr-bg-lt;
+	margin: 0;
+	border: 1px solid $clr-border-sep;
+	border-radius: 10px;
+	position: relative;
+	height: 1.55em;
+	cursor: pointer;
+
+	&::before {
+		position: absolute;
+		font-size: 0.9em;
+		font-family: $ff-title;
+		top: 1px;
+		left: 10px;
+	}
+
+	&:checked {
+		transition: 200ms;
+		background-color: $clr;
+		color: $clr-ntrl-w;
+		border: 1px solid darken($clr, 10%);
+	}
+}
+
+@mixin submitBtn {
+	border: none;
+	border-radius: 8px;
+	padding: 0.25em 0.75em;
+	cursor: pointer;
+	font-family: $ff-title;
+	background-color: $clr-bg-lt;
+
+	&:hover {
+		background-color: $clr-danger-low;
+		color: $clr-ntrl-w;
+		outline: 2px solid darken($clr-danger-low, 15%);
+	}
+}

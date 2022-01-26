@@ -29,7 +29,7 @@
 			width: 0.3em;
 			border-radius: 20px;
 		}
-	
+
 		&::-webkit-scrollbar-thumb {
 			background-color: $clr-border-sep;
 			border-radius: 20px;
@@ -219,5 +219,98 @@
 	.subtitle {
 		@include subTitle;
 		font-size: 2em;
+	}
+}
+
+#todo-add {
+	@include flexCenter(column);
+	font-size: 1.1em;
+	row-gap: 1rem;
+	border: 2px solid $clr-border-sep;
+	width: 30em;
+	border-radius: 10px;
+	padding: 2.25em 2em 1em 2em;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: $clr-bg-input;
+	
+	.fa-times {
+		position: absolute;
+		font-size: 1.1em;
+		color: $clr-border-sep;
+		top: 10px;
+		right: 15px;
+		cursor: pointer;
+
+		&:hover {
+			color: $clr-danger-high-lt;
+			transform: scale(1.2);
+		}
+	}
+
+	.container {
+		@include flexStart();
+		align-items: center;
+		justify-content: space-between;
+
+		.inputTitle {
+			@include textInput;
+			width: 40%;
+		}
+
+		.inputDate {
+			@include textInput;
+			width: 40%
+		}
+	}
+
+	.inputDesc {
+		@include textInput;
+	}
+
+	.container--radio {
+		@include flexCenter();
+		justify-content: flex-start;
+		width: 100%;
+		column-gap: 1rem;
+
+		h1 {
+			@include subTitle;
+			font-size: 1.3em;
+			color: $clr-ntrl-w;
+		}
+	}
+
+	#priorHigh {
+		@include radioPriority($clr-danger-high-lt);
+		width: 3.5em;
+
+		&::before {
+			content: "High";
+		}
+	}
+
+	#priorMed {
+		@include radioPriority($clr-danger-medium);
+		width: 5em;
+
+		&::before {
+			content: "Medium";
+		}
+	}
+
+	#priorLow {
+		@include radioPriority($clr-danger-low);
+		width: 3.2em;
+
+		&::before {
+			content: "Low";
+		}
+	}
+
+	input[type="submit"]{
+		@include submitBtn;
 	}
 }

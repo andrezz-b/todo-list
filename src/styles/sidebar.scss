@@ -116,7 +116,7 @@
 	border: 2px solid $clr-border-sep;
 	border-radius: 12px;
 	padding: .75em 1.25em .5em .65em;
-	background-color: lighten($clr-bg-dk, 35%);
+	background-color: $clr-bg-input;
 	transition: transform 200ms ease-in-out;
 	transform-origin: left;
 
@@ -131,33 +131,11 @@
 	}
 
 	input[type="text"] {
-		background-color: $clr-bg-lt;
-		border: 1px solid $clr-border-sep;
-		border-radius: 10px;
-		padding: .35em 0;
-		padding-left: .5em;
-		width: 100%;
-		
-
-		&:focus {
-			border: 1px solid $clr-base-dk;
-			background-color: $clr-ntrl-w;
-			outline: 1px solid $clr-base-dk;
-		}
+		@include textInput;
 	}
 
 	input[type="submit"]{
-		border: none;
-		border-radius: 8px;
-		padding: .25em .75em;
-		cursor: pointer;
-		background-color: $clr-bg-lt;
-
-		&:hover {
-			background-color: $clr-danger-low;
-			color: $clr-ntrl-w;
-			outline: 2px solid darken($clr-danger-low, 15%);
-		}
+		@include submitBtn;
 	}
 }
 
@@ -171,7 +149,7 @@
 	background-color: $clr-bg-lt;
 
 	&:hover {
-		background-color: lighten($clr-danger-high, 15%);
+		background-color: $clr-danger-high-lt;
 		color: $clr-ntrl-w;
 		outline: 1px solid $clr-danger-high;
 	}
