@@ -71,6 +71,7 @@
 		padding: 0.35em 0.5em;
 		display: grid;
 		width: 93%;
+		min-width: 10rem;
 		grid-template-columns: 1fr 0.15fr;
 		column-gap: 0.5rem;
 		align-items: center;
