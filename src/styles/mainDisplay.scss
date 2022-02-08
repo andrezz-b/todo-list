@@ -178,8 +178,17 @@
 	}
 }
 
-.removed {
+.hidden {
+	transform: scale(0);
+	opacity: 0;
+	padding: 0;
+	border: none;
+	max-height: 0;
+}
+
+.hide {
 	animation: remove-animate 0.3s ease-out;
+	animation-fill-mode: forwards;
 }
 
 .low {
