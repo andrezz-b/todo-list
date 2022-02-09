@@ -28,6 +28,23 @@ export const createTodoElement = (data) => {
 	return todoEl;
 };
 
+export const createProjectElement = (data) => {
+	const projectEl = createDiv("project-item");
+
+	const title = document.createElement("h1");
+	title.classList.add("subtitle--project");
+	title.textContent = data.title;
+
+	const span = document.createElement("span");
+	const cog = document.createElement("i");
+	cog.setAttribute("class", "fas fa-cog");
+	span.append(cog);
+
+	projectEl.append(title, span);
+
+	return projectEl;
+};
+
 const createExpanded = (text) => {
 	const divExpanded = document.createElement("div");
 	divExpanded.classList.add("hidden");

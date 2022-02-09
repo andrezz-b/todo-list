@@ -1,15 +1,21 @@
-import { createTodoElement } from "./createElement";
+import { createTodoElement, createProjectElement } from "./createElement";
 import PubSub from "pubsub-js";
 
 export const controllerDOM = (function () {
 	const newProjectBtn = document.querySelector("#project-add-btn");
 	const cancelBtn = document.querySelectorAll(".cancel");
 	const todoList = document.querySelector("#todo-list");
+	const projectList = document.querySelector("#project-list");
 
 	const renderTodoItem = (tag, data) => {
 		const todoElement = createTodoElement(data);
 		todoElement.addEventListener("click", todoExtend);
 		todoList.append(todoElement);
+	};
+
+	const renderProjectSide = (tag, data) => {
+		const projectElement = createProjectElement(data);
+		projectList.append(projectElement);
 	};
 
 	const todoExtend = (e) => {
@@ -56,6 +62,7 @@ export const controllerDOM = (function () {
 
 	const init = () => {
 		PubSub.subscribe("add-new-todo", renderTodoItem);
+		PubSub.subscribe("add-new-project", renderProjectSide);
 		cancelBtn.forEach((btn) => {
 			btn.addEventListener("click", function (e) {
 				const form = e.target.closest("form");
@@ -68,5 +75,6 @@ export const controllerDOM = (function () {
 
 	return {
 		init,
+		toggleInput,
 	};
 })();
