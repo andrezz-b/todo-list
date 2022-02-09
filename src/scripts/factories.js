@@ -16,9 +16,13 @@ export const Project = (name, idNum) => {
 		active = active ? false : true;
 	};
 
+    const getActive = () => {
+        return active;
+    }
+
 	PubSub.subscribe("add-new-todo", addTodoItem);
 
-	return { name, id, active, changeActive };
+	return { name, id, getActive, changeActive };
 };
 
 export const todo = (data) => {
@@ -33,3 +37,5 @@ export const todo = (data) => {
 		logInfo,
 	};
 };
+
+

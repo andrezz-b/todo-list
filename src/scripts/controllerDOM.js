@@ -19,6 +19,12 @@ export const controllerDOM = (function () {
 		const projectElement = createProjectElement(data);
 		const id = projectList.childElementCount;
 		projectElement.setAttribute("data-id", id);
+		projectElement.addEventListener("click", function (e) {
+			if (e.target.getAttribute("class") === "fas fa-cog") return;
+			let data = {};
+			data.id = e.target.closest(".project-item").getAttribute("data-id");
+			PubSub.publish("change-active-project", data);
+		});
 		projectList.append(projectElement);
 	};
 
@@ -75,6 +81,7 @@ export const controllerDOM = (function () {
 			});
 		});
 		newProjectBtn.addEventListener("click", displayInput);
+		renderProjectSide(undefined, { title: "Project 1" });
 	};
 
 	return {

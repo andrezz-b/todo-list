@@ -4,7 +4,9 @@ import { controllerDOM } from "./scripts/controllerDOM";
 import { formController } from "./scripts/formController";
 import { Project } from "./scripts/factories";
 import { storageController } from "./scripts/storageController";
+import { displayController } from "./scripts/displayController";
 
 controllerDOM.init();
-
-PubSub.publish("add-new-project", { title: "Project 1" });
+formController.init();
+storageController.init();
+displayController.init();

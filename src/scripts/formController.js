@@ -28,10 +28,12 @@ export const formController = (function () {
 	const addNewProject = () => {
 		let data = {};
 		data.title = newProjectForm.elements["title"].value;
-        controllerDOM.toggleInput(newProjectForm, "true");
+		controllerDOM.toggleInput(newProjectForm, "true");
 
-        PubSub.publish("add-new-project", data);
+		PubSub.publish("add-new-project", data);
 	};
 
-	init();
+	return {
+		init,
+	};
 })();
