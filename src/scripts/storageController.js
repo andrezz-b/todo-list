@@ -9,7 +9,7 @@ export const storageController = (() => {
 	};
 
 	const addProject = (tag, data) => {
-		const project = Project(data.title);
+		const project = Project(data.title, storage.length);
 		storage.push(project);
 	};
 

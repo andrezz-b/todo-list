@@ -9,12 +9,16 @@ export const controllerDOM = (function () {
 
 	const renderTodoItem = (tag, data) => {
 		const todoElement = createTodoElement(data);
+		const id = todoList.childElementCount;
+		todoElement.setAttribute("data-id", id);
 		todoElement.addEventListener("click", todoExtend);
 		todoList.append(todoElement);
 	};
 
 	const renderProjectSide = (tag, data) => {
 		const projectElement = createProjectElement(data);
+		const id = projectList.childElementCount;
+		projectElement.setAttribute("data-id", id);
 		projectList.append(projectElement);
 	};
 
