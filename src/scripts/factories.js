@@ -1,4 +1,5 @@
 import PubSub from "pubsub-js";
+import { displayController } from "./displayController";
 
 export const Project = (name, idNum) => {
 	const todoItems = [];
@@ -6,10 +7,11 @@ export const Project = (name, idNum) => {
 	let id = idNum;
 
 	const addTodoItem = (tag, data) => {
+		const activeID = displayController.getActiveID()
+		if (activeID != id) return;
 		data.id = todoItems.length;
 		const todoItem = todo(data);
 		todoItems.push(todoItem);
-		todoItem.logInfo();
 	};
 
 	const changeActive = () => {
@@ -20,21 +22,25 @@ export const Project = (name, idNum) => {
         return active;
     }
 
+	const getTodoItems = () => {
+		return todoItems;
+	}
+
 	PubSub.subscribe("add-new-todo", addTodoItem);
 
-	return { name, id, getActive, changeActive };
+	return { name, id, getActive, changeActive, getTodoItems };
 };
 
 export const todo = (data) => {
 	const info = data;
-	let completed = false;
+	info.completed = false;
 
-	const logInfo = () => {
-		console.table(info);
-	};
+	const getInfo = () => {
+		return info;
+	}
 
 	return {
-		logInfo,
+		getInfo,
 	};
 };
 

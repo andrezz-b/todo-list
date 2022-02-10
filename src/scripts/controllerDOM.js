@@ -1,4 +1,5 @@
 import { createTodoElement, createProjectElement } from "./createElement";
+import { storageController } from "./storageController";
 import PubSub from "pubsub-js";
 
 export const controllerDOM = (function () {
@@ -7,7 +8,7 @@ export const controllerDOM = (function () {
 	const todoList = document.querySelector("#todo-list");
 	const projectList = document.querySelector("#project-list");
 
-	const renderTodoItem = (tag, data) => {
+	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
 		const id = todoList.childElementCount;
 		todoElement.setAttribute("data-id", id);
@@ -15,17 +16,36 @@ export const controllerDOM = (function () {
 		todoList.append(todoElement);
 	};
 
-	const renderProjectSide = (tag, data) => {
+	const renderProjectTodo = (data) => {
+		Array.from(todoList.children).forEach((el) => {
+			el.remove();
+		});
+		const project = storageController.getProject(data.id);
+		project.getTodoItems().forEach(todo => {
+			addTodoElement(undefined, todo.getInfo())
+		})
+	};
+
+	const addProjectElement = (tag, data) => {
 		const projectElement = createProjectElement(data);
 		const id = projectList.childElementCount;
 		projectElement.setAttribute("data-id", id);
 		projectElement.addEventListener("click", function (e) {
 			if (e.target.getAttribute("class") === "fas fa-cog") return;
 			let data = {};
-			data.id = e.target.closest(".project-item").getAttribute("data-id");
+			const projectDiv = e.target.closest(".project-item");
+			data.id = projectDiv.getAttribute("data-id");
+			data.title = projectDiv.firstElementChild.textContent;
 			PubSub.publish("change-active-project", data);
 		});
 		projectList.append(projectElement);
+	};
+
+	const updateProjectTitle = (tag, data) => {
+		const titleMain = document.querySelector(".title--main");
+		if (data.title == titleMain.textContent) return;
+		titleMain.textContent = data.title;
+		renderProjectTodo(data);
 	};
 
 	const todoExtend = (e) => {
@@ -71,8 +91,9 @@ export const controllerDOM = (function () {
 	};
 
 	const init = () => {
-		PubSub.subscribe("add-new-todo", renderTodoItem);
-		PubSub.subscribe("add-new-project", renderProjectSide);
+		PubSub.subscribe("add-new-todo", addTodoElement);
+		PubSub.subscribe("add-new-project", addProjectElement);
+		PubSub.subscribe("change-active-project", updateProjectTitle);
 		cancelBtn.forEach((btn) => {
 			btn.addEventListener("click", function (e) {
 				const form = e.target.closest("form");
@@ -81,7 +102,7 @@ export const controllerDOM = (function () {
 			});
 		});
 		newProjectBtn.addEventListener("click", displayInput);
-		renderProjectSide(undefined, { title: "Project 1" });
+		addProjectElement(undefined, { title: "Project 1" });
 	};
 
 	return {

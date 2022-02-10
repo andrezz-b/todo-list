@@ -14,6 +14,9 @@ export const displayController = (() => {
 		setActive();
 		activeID = data.id;
 		setActive();
+
+		// Test
+		printActive()
 	};
 
 	const setActive = () => {
@@ -21,7 +24,21 @@ export const displayController = (() => {
 		storage[activeID].changeActive();
 	};
 
+	const getActiveID = () => {
+		return activeID;
+	}
+
+
+	// Test changing active status
+	const printActive = () => {
+		const storage = storageController.getStorage();
+		storage.forEach(el => {
+			if (el.getActive()) console.log(el)
+		})
+	}
+
 	return {
 		init,
+		getActiveID,
 	};
 })();
