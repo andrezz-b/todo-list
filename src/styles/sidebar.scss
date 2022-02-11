@@ -53,6 +53,7 @@
 	gap: 0.5rem;
 	padding-left: 1.25rem;
 	overflow: auto;
+	overflow-x: hidden;
 	height: 45%;
 
 	&::-webkit-scrollbar {
@@ -101,6 +102,56 @@
 		&:hover > span {
 			opacity: 1;
 		}
+	}
+}
+
+.edit-project {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 1fr 1fr;
+	align-items: center;
+	row-gap: .5rem;
+	column-gap: .75rem;
+	
+	
+	position: absolute;
+	left: 12%;
+	background-color: $clr-bg-input;
+	border: 2px solid $clr-border-sep;
+	border-radius: 12px;
+	font-size: .9em;
+	padding: 1.25em 1.65em .5em .65em;
+
+	.fa-times {
+		position: absolute;
+		font-size: 1.1em;
+		color: $clr-border-sep;
+		top: 5px;
+		right: 8px;
+		cursor: pointer;
+
+		&:hover {
+			color: $clr-danger-high-lt;
+			transform: scale(1.2);
+		}
+	}
+
+	input[type="submit"], input[type="button"] {
+		@include submitBtn;
+	}
+
+	input[type="button"] {
+		@extend .cancel;
+	}
+
+	input[type="text"] {
+		@include textInput;
+		width: 10em;
+	}
+
+	h1 {
+		padding-left: .3em;
+		color: $clr-ntrl-w;
 	}
 }
 
