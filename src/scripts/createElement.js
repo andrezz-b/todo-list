@@ -35,12 +35,32 @@ export const createProjectElement = (data) => {
 	title.classList.add("subtitle--project");
 	title.textContent = data.title;
 
-	const span = document.createElement("span");
-	const cog = document.createElement("i");
-	cog.setAttribute("class", "fas fa-cog");
-	span.append(cog);
+	const penEdit = createFaIcon("fas", "fa-edit");
+	penEdit.classList.add("rename-project");
 
-	projectEl.append(title, span);
+	const trashIcon = createFaIcon("far", "fa-trash-alt");
+	trashIcon.classList.add("remove-project");
+
+	const form = document.createElement("form");
+	form.setAttribute("data-open", "false");
+	form.setAttribute("action", "#");
+	form.setAttribute("autocomplete", "off");
+	form.setAttribute("onsubmit", "return false");
+	form.classList.add("project-change-name");
+
+	const inputText = document.createElement("input");
+	inputText.type = "text";
+	inputText.placeholder = "Name";
+	inputText.name = "title";
+	inputText.value = data.title;
+
+	const inputSubmit = document.createElement("input");
+	inputSubmit.type = "submit";
+	inputSubmit.hidden = "true";
+
+	form.append(inputText, inputSubmit);
+
+	projectEl.append(title, penEdit, trashIcon, form);
 
 	return projectEl;
 };
@@ -71,4 +91,15 @@ const createDiv = (...className) => {
 	});
 
 	return div;
+};
+
+const createFaIcon = (...className) => {
+	const span = document.createElement("span");
+	const i = document.createElement("i");
+
+	className.forEach((name) => {
+		i.classList.add(name);
+	});
+	span.append(i);
+	return span;
 };
