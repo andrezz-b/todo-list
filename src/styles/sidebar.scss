@@ -104,6 +104,15 @@
 			opacity: 1;
 		}
 	}
+
+	.active {
+		background-color: rgba($clr-bg-dk, $alpha: 0.2);
+		border-radius: 3px;
+
+		span {
+			opacity: 1;
+		}
+	}
 }
 
 .project-change-name {
