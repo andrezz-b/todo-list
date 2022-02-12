@@ -8,6 +8,19 @@ export const controllerDOM = (function () {
 	const todoList = document.querySelector("#todo-list");
 	const projectList = document.querySelector("#project-list");
 
+	const projectRenameBtn = document.querySelector(".rename-project");
+
+	const openRenameForm = (e) => {
+		const form = e.target.closest(".project-item").lastElementChild;
+		const open = form.getAttribute("data-open");
+		form.addEventListener("submit", function(e){
+			const form = e.target;
+			const open = form.getAttribute("data-open");
+			toggleInput(form, open);
+		})
+		toggleInput(form, open);
+	}
+
 	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
 		const id = todoList.childElementCount;
@@ -30,16 +43,18 @@ export const controllerDOM = (function () {
 		const projectElement = createProjectElement(data);
 		const id = projectList.childElementCount;
 		projectElement.setAttribute("data-id", id);
-		projectElement.addEventListener("click", function (e) {
-			if (e.target.getAttribute("class") === "fas fa-cog") return;
-			let data = {};
-			const projectDiv = e.target.closest(".project-item");
-			data.id = projectDiv.getAttribute("data-id");
-			data.title = projectDiv.firstElementChild.textContent;
-			PubSub.publish("change-active-project", data);
-		});
+		projectElement.addEventListener("click", changeActiveProject);
 		projectList.append(projectElement);
 	};
+
+	const changeActiveProject = (e) => {
+		if (e.target.getAttribute("class") === "fas fa-cog") return;
+		let data = {};
+		const projectDiv = e.target.closest(".project-item");
+		data.id = projectDiv.getAttribute("data-id");
+		data.title = projectDiv.firstElementChild.textContent;
+		PubSub.publish("change-active-project", data);
+	}
 
 	const updateProjectTitle = (tag, data) => {
 		const titleMain = document.querySelector(".title--main");
@@ -94,6 +109,8 @@ export const controllerDOM = (function () {
 		PubSub.subscribe("add-new-todo", addTodoElement);
 		PubSub.subscribe("add-new-project", addProjectElement);
 		PubSub.subscribe("change-active-project", updateProjectTitle);
+	projectRenameBtn.addEventListener("click", openRenameForm);
+
 		cancelBtn.forEach((btn) => {
 			btn.addEventListener("click", function (e) {
 				const form = e.target.closest("form");

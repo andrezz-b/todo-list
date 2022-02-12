@@ -28,14 +28,12 @@
 				</div>
 				<div id="project-list">
 					<div class="project-item" data-id="0">
-						<h1 class="subtitle--project">Test for form</h1>
-						<span><i class="fas fa-cog"></i></span>
-						<form  class="edit-project" data-open="false" action="#" autocomplete="off" onsubmit="return false"> 
-							<i class="fas fa-times"></i>
-							<input type="text" placeholder="New name">
-							<input type="submit" value="Rename">
-							<h1 class="subtitle--project">Remove project:</h1>
-							<input type="button" value="Delete">
+						<h1 class="subtitle--project">Project form</h1>
+						<span class="rename-project"><i class="fas fa-edit"></i></span>
+						<span class="remove-project"><i class="far fa-trash-alt"></i></span>
+						<form  class="project-change-name" data-open="false" action="#" autocomplete="off" onsubmit="return false">
+							<input type="text" placeholder="New name" name="title"/>
+							<input type="submit" hidden />
 						</form>
 					</div>
 					<!-- <div class="project-item">

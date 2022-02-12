@@ -55,6 +55,7 @@
 	overflow: auto;
 	overflow-x: hidden;
 	height: 45%;
+	width: 100%;
 
 	&::-webkit-scrollbar {
 		width: 0.3em;
@@ -67,13 +68,14 @@
 	}
 
 	.project-item {
+		position: relative;
 		cursor: pointer;
 		z-index: 10;
 		padding: 0.35em 0.5em;
 		display: grid;
 		width: 93%;
-		min-width: 10rem;
-		grid-template-columns: 1fr 0.15fr;
+		min-width: 9rem;
+		grid-template-columns: 1fr 0.15fr 0.15fr;
 		column-gap: 0.5rem;
 		align-items: center;
 		transition: 200ms ease-in;
@@ -92,7 +94,6 @@
 			transform-origin: center;
 
 			&:hover {
-				transform: rotate(90deg);
 				color: rgba($clr-ntrl-b, $alpha: 1);
 			}
 
@@ -105,53 +106,23 @@
 	}
 }
 
-.edit-project {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	grid-template-rows: 1fr 1fr;
-	align-items: center;
-	row-gap: .5rem;
-	column-gap: .75rem;
-	
-	
+.project-change-name {
 	position: absolute;
-	left: 12%;
-	background-color: $clr-bg-input;
-	border: 2px solid $clr-border-sep;
-	border-radius: 12px;
-	font-size: .9em;
-	padding: 1.25em 1.65em .5em .65em;
+	font-size: 1em;
+	width: 64%;
+	height: 90%;
+	transform: scale(0);
 
-	.fa-times {
-		position: absolute;
-		font-size: 1.1em;
-		color: $clr-border-sep;
-		top: 5px;
-		right: 8px;
-		cursor: pointer;
-
-		&:hover {
-			color: $clr-danger-high-lt;
-			transform: scale(1.2);
-		}
-	}
-
-	input[type="submit"], input[type="button"] {
-		@include submitBtn;
-	}
-
-	input[type="button"] {
-		@extend .cancel;
+	&.open {
+		transform: scale(1);
 	}
 
 	input[type="text"] {
+		height: 100%;
 		@include textInput;
-		width: 10em;
-	}
-
-	h1 {
-		padding-left: .3em;
-		color: $clr-ntrl-w;
+		padding: 0;
+		padding-left: .5em;
+		margin-left: .1rem;
 	}
 }
 
