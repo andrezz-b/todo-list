@@ -1,20 +1,13 @@
 import { createTodoElement, createProjectElement } from "./createElement";
 import { storageController } from "./storageController";
 import PubSub from "pubsub-js";
+import { displayController } from "./displayController";
 
 export const controllerDOM = (function () {
 	const newProjectBtn = document.querySelector("#project-add-btn");
 	const cancelBtn = document.querySelectorAll(".cancel");
 	const todoList = document.querySelector("#todo-list");
 	const projectList = document.querySelector("#project-list");
-
-	const openRenameForm = (e) => {
-		const projectItem = e.target.closest(".project-item");
-		const form = projectItem.lastElementChild;
-		const open = form.getAttribute("data-open");
-		projectItem.classList.toggle("active");
-		toggleInput(form, open);
-	};
 
 	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
@@ -24,7 +17,7 @@ export const controllerDOM = (function () {
 		todoList.append(todoElement);
 	};
 
-	const renderProjectTodo = (data) => {
+	const renderProjectTodo = (tag, data) => {
 		Array.from(todoList.children).forEach((el) => {
 			el.remove();
 		});
@@ -32,42 +25,6 @@ export const controllerDOM = (function () {
 		project.getTodoItems().forEach((todo) => {
 			addTodoElement(undefined, todo.getInfo());
 		});
-	};
-
-	const addProjectElement = (tag, data) => {
-		const projectElement = createProjectElement(data);
-		const form = projectElement.lastElementChild;
-		const projectRenameBtn = projectElement.querySelector(".rename-project");
-		const id = projectList.childElementCount;
-
-		projectElement.setAttribute("data-id", id);
-		projectRenameBtn.addEventListener("click", openRenameForm);
-		projectElement.addEventListener("click", changeActiveProject);
-		form.addEventListener("submit", function (e) {
-			toggleInput(e.target, e.target.getAttribute("data-open"));
-			e.target.closest(".project-item").classList.toggle("active");
-		});
-		projectList.append(projectElement);
-	};
-
-	const changeActiveProject = (e) => {
-		if (
-			e.target.getAttribute("class") !== "project-item" &&
-			e.target.getAttribute("class") !== "subtitle--project"
-		)
-			return;
-		let data = {};
-		const projectDiv = e.target.closest(".project-item");
-		data.id = projectDiv.getAttribute("data-id");
-		data.title = projectDiv.firstElementChild.textContent;
-		PubSub.publish("change-active-project", data);
-	};
-
-	const updateProjectTitle = (tag, data) => {
-		const titleMain = document.querySelector(".title--main");
-		if (data.title == titleMain.textContent) return;
-		titleMain.textContent = data.title;
-		renderProjectTodo(data);
 	};
 
 	const todoExtend = (e) => {
@@ -96,6 +53,66 @@ export const controllerDOM = (function () {
 		}
 	};
 
+	const addProjectElement = (tag, data) => {
+		const projectElement = createProjectElement(data);
+		const form = projectElement.lastElementChild;
+		const projectRenameBtn = projectElement.querySelector(".rename-project");
+		const id = projectList.childElementCount;
+
+		projectElement.setAttribute("data-id", id);
+		projectRenameBtn.addEventListener("click", openRenameForm);
+		projectElement.addEventListener("click", changeActiveProject);
+		form.addEventListener("submit", renameProject);
+		projectList.append(projectElement);
+	};
+
+	const openRenameForm = (e) => {
+		const projectItem = e.target.closest(".project-item");
+		const form = projectItem.lastElementChild;
+		const open = form.getAttribute("data-open");
+		projectItem.classList.toggle("active");
+		toggleInput(form, open);
+	};
+
+	const renameProject = (e) => {
+		const form = e.target;
+		const projectItem = e.target.closest(".project-item");
+		projectItem.classList.toggle("active");
+		toggleInput(form, form.getAttribute("data-open"));
+
+		let data = {};
+		data.title = form["title"].value;
+		data.id = projectItem.getAttribute("data-id");
+		PubSub.publish("change-project-name", data);
+
+		const titleElement = projectItem.querySelector(".subtitle--project");
+		titleElement.textContent = data.title;
+	};
+
+	const changeActiveProject = (e) => {
+		if (
+			e.target.getAttribute("class") !== "project-item" &&
+			e.target.getAttribute("class") !== "subtitle--project"
+		)
+			return;
+		let data = {};
+		const projectDiv = e.target.closest(".project-item");
+		data.id = projectDiv.getAttribute("data-id");
+		data.title = storageController.getProject(data.id).getName();
+		PubSub.publish("change-active-project", data);
+	};
+
+	const updateProjectTitle = (tag, data) => {
+		const titleMain = document.querySelector(".title--main");
+		if (tag === "change-active-project") {
+			if (data.title == titleMain.textContent) return;
+			titleMain.textContent = data.title;
+		} else if (tag === "change-project-name") {
+			if (data.id != displayController.getActiveID()) return;
+			titleMain.textContent = data.title;
+		}
+	};
+
 	const displayInput = () => {
 		const addProjectForm = document.querySelector("#project-add");
 		const open = addProjectForm.getAttribute("data-open");
@@ -116,6 +133,8 @@ export const controllerDOM = (function () {
 		PubSub.subscribe("add-new-todo", addTodoElement);
 		PubSub.subscribe("add-new-project", addProjectElement);
 		PubSub.subscribe("change-active-project", updateProjectTitle);
+		PubSub.subscribe("change-project-name", updateProjectTitle);
+		PubSub.subscribe("new-active-project", renderProjectTodo);
 
 		cancelBtn.forEach((btn) => {
 			btn.addEventListener("click", function (e) {

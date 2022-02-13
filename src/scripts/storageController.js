@@ -7,12 +7,13 @@ export const storageController = (() => {
 	const init = () => {
 		//PubSub.publish("add-new-project", { title: "Project 1" });
 		PubSub.subscribe("add-new-project", addProject);
+		PubSub.subscribe("change-project-name", renameProject);
 	};
 
 	const getProject = (id) => {
 		let project;
 		storage.forEach((el) => {
-			project = (el.id == id) ? el : project;
+			project = el.id == id ? el : project;
 		});
 		return project;
 	};
@@ -20,6 +21,11 @@ export const storageController = (() => {
 	const addProject = (tag, data) => {
 		const project = Project(data.title, storage.length);
 		storage.push(project);
+	};
+
+	const renameProject = (tag, data) => {
+		const project = getProject(data.id);
+		project.setName(data.title);
 	};
 
 	const getStorage = () => {

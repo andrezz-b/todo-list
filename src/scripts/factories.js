@@ -7,7 +7,7 @@ export const Project = (name, idNum) => {
 	let id = idNum;
 
 	const addTodoItem = (tag, data) => {
-		const activeID = displayController.getActiveID()
+		const activeID = displayController.getActiveID();
 		if (activeID != id) return;
 		data.id = todoItems.length;
 		const todoItem = todo(data);
@@ -18,17 +18,25 @@ export const Project = (name, idNum) => {
 		active = active ? false : true;
 	};
 
-    const getActive = () => {
-        return active;
-    }
+	const getActive = () => {
+		return active;
+	};
 
 	const getTodoItems = () => {
 		return todoItems;
-	}
+	};
+
+	const setName = (newName) => {
+		name = newName;
+	};
+
+	const getName = () => {
+		return name;
+	};
 
 	PubSub.subscribe("add-new-todo", addTodoItem);
 
-	return { name, id, getActive, changeActive, getTodoItems };
+	return { id, getActive, changeActive, getTodoItems, setName, getName };
 };
 
 export const todo = (data) => {
@@ -37,11 +45,9 @@ export const todo = (data) => {
 
 	const getInfo = () => {
 		return info;
-	}
+	};
 
 	return {
 		getInfo,
 	};
 };
-
-

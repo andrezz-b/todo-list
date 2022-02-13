@@ -14,7 +14,7 @@ export const displayController = (() => {
 		setActive();
 		activeID = data.id;
 		setActive();
-
+		PubSub.publish("new-active-project", data);
 		// Test
 		printActive()
 	};
