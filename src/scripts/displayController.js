@@ -5,27 +5,26 @@ export const displayController = (() => {
 	let activeID = 0;
 
 	const init = () => {
-		setActive();
 		PubSub.subscribe("change-active-project", updateActive);
 	};
 
 	const updateActive = (tag, data) => {
 		if (activeID == data.id) return;
-		setActive();
+		const storage = storageController.getStorage();
+		storage[activeID].changeActive();
 		activeID = data.id;
-		setActive();
+		storage[activeID].changeActive();
 		PubSub.publish("new-active-project", data);
 		// Test
 		printActive()
 	};
 
-	const setActive = () => {
-		const storage = storageController.getStorage();
-		storage[activeID].changeActive();
-	};
-
 	const getActiveID = () => {
 		return activeID;
+	}
+
+	const setActiveID = (newID) => {
+		activeID = newID;
 	}
 
 
@@ -33,12 +32,13 @@ export const displayController = (() => {
 	const printActive = () => {
 		const storage = storageController.getStorage();
 		storage.forEach(el => {
-			if (el.getActive()) console.log(el)
+			if (el.getActive()) console.log(el, activeID)
 		})
 	}
 
 	return {
 		init,
 		getActiveID,
+		setActiveID,
 	};
 })();

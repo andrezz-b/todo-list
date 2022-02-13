@@ -57,13 +57,29 @@ export const controllerDOM = (function () {
 		const projectElement = createProjectElement(data);
 		const form = projectElement.lastElementChild;
 		const projectRenameBtn = projectElement.querySelector(".rename-project");
+		const projectRemoveBtn = projectElement.querySelector(".remove-project");
 		const id = projectList.childElementCount;
 
 		projectElement.setAttribute("data-id", id);
 		projectRenameBtn.addEventListener("click", openRenameForm);
+		projectRemoveBtn.addEventListener("click", removeProjectElement);
 		projectElement.addEventListener("click", changeActiveProject);
 		form.addEventListener("submit", renameProject);
 		projectList.append(projectElement);
+	};
+
+	const removeProjectElement = (e) => {
+		if (storageController.getStorage().length === 1) {
+			alert("You must have at least one project!");
+			return;
+		}
+		const projectItem = e.target.closest(".project-item");
+		let data = {
+			id: projectItem.getAttribute("data-id"),
+		};
+		projectItem.remove();
+		PubSub.publish("remove-project", data);
+		updateDOMid();
 	};
 
 	const openRenameForm = (e) => {
@@ -80,9 +96,11 @@ export const controllerDOM = (function () {
 		projectItem.classList.toggle("active");
 		toggleInput(form, form.getAttribute("data-open"));
 
-		let data = {};
-		data.title = form["title"].value;
-		data.id = projectItem.getAttribute("data-id");
+		let data = {
+			title: form["title"].value,
+			id: projectItem.getAttribute("data-id"),
+		};
+
 		PubSub.publish("change-project-name", data);
 
 		const titleElement = projectItem.querySelector(".subtitle--project");
@@ -95,9 +113,11 @@ export const controllerDOM = (function () {
 			e.target.getAttribute("class") !== "subtitle--project"
 		)
 			return;
-		let data = {};
-		const projectDiv = e.target.closest(".project-item");
-		data.id = projectDiv.getAttribute("data-id");
+
+		const projectItem = e.target.closest(".project-item");
+		let data = {
+			id: projectItem.getAttribute("data-id"),
+		};
 		data.title = storageController.getProject(data.id).getName();
 		PubSub.publish("change-active-project", data);
 	};
@@ -127,6 +147,12 @@ export const controllerDOM = (function () {
 			input.classList.add("open");
 			input.setAttribute("data-open", "true");
 		}
+	};
+
+	const updateDOMid = () => {
+		Array.from(projectList.children).forEach((project, i) => {
+			project.setAttribute("data-id", i);
+		});
 	};
 
 	const init = () => {

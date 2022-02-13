@@ -2,28 +2,28 @@ import PubSub from "pubsub-js";
 import { displayController } from "./displayController";
 
 export const Project = (name, idNum) => {
-	const todoItems = [];
-	let active = false;
-	let id = idNum;
+	const _todoItems = [];
+	let _active = false;
+	let _id = idNum;
 
 	const addTodoItem = (tag, data) => {
 		const activeID = displayController.getActiveID();
-		if (activeID != id) return;
-		data.id = todoItems.length;
+		if (activeID != _id) return;
+		data.id = _todoItems.length;
 		const todoItem = todo(data);
-		todoItems.push(todoItem);
+		_todoItems.push(todoItem);
 	};
 
 	const changeActive = () => {
-		active = active ? false : true;
+		_active = _active ? false : true;
 	};
 
 	const getActive = () => {
-		return active;
+		return _active;
 	};
 
 	const getTodoItems = () => {
-		return todoItems;
+		return _todoItems;
 	};
 
 	const setName = (newName) => {
@@ -34,9 +34,16 @@ export const Project = (name, idNum) => {
 		return name;
 	};
 
+	const getId = () => {
+		return _id;
+	}
+
+	const setId = (newId) => {
+		_id = newId;
+	}
 	PubSub.subscribe("add-new-todo", addTodoItem);
 
-	return { id, getActive, changeActive, getTodoItems, setName, getName };
+	return { name, getId, setId , getActive, changeActive, getTodoItems, setName, getName };
 };
 
 export const todo = (data) => {
