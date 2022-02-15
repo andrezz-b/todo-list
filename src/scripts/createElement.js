@@ -7,6 +7,7 @@ export const createTodoElement = (data) => {
 	const label = document.createElement("label");
 	const checkbox = document.createElement("input");
 	checkbox.type = "checkbox";
+	checkbox.checked = data.completed;
 	label.append(checkbox);
 
 	const title = document.createElement("h3");
@@ -16,10 +17,12 @@ export const createTodoElement = (data) => {
 	const dueDate = createDiv("due-date");
 	dueDate.textContent = data.date;
 
-	const trashIcon = document.createElement("i");
-	trashIcon.setAttribute("class", "far fa-trash-alt");
+	const trashIcon = createFaIcon("far", "fa-trash-alt");
+	trashIcon.classList.add("remove-todo");
+	const editIcon = createFaIcon("fas", "fa-edit");
+	editIcon.classList.add("rename-todo");
 
-	container.append(priority, label, title, dueDate, trashIcon);
+	container.append(priority, label, title, dueDate, editIcon, trashIcon);
 	const expanded = createExpanded(data.desc);
 
 	todoEl.append(container, expanded);

@@ -115,15 +115,20 @@
 		flex: 1.5;
 	}
 
-	.fa-trash-alt {
-		flex: 0.4;
+	.remove-todo,
+	.rename-todo {
+		flex: 0.3;
 		font-size: 1.1em;
 		justify-self: flex-end;
 		cursor: pointer;
 		transition: 300ms;
 
-		&:hover {
+		& > i:hover {
 			color: $clr-danger-high;
+		}
+
+		.fa-edit:hover {
+			color: darken($clr-danger-medium, 5%);
 		}
 	}
 }
@@ -244,7 +249,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: $clr-bg-input;
-	
+
 	.fa-times {
 		position: absolute;
 		font-size: 1.1em;
@@ -271,7 +276,7 @@
 
 		.inputDate {
 			@include textInput;
-			width: 40%
+			width: 40%;
 		}
 	}
 
@@ -319,7 +324,7 @@
 		}
 	}
 
-	input[type="submit"]{
+	input[type="submit"] {
 		@include submitBtn;
 	}
 }
