@@ -11,11 +11,23 @@ export const controllerDOM = (function () {
 
 	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
+		const removeTodoBtn = todoElement.querySelector(".remove-todo");
+		removeTodoBtn.addEventListener("click", removeTodoElement);
 		const id = todoList.childElementCount;
 		todoElement.setAttribute("data-id", id);
 		todoElement.addEventListener("click", todoExtend);
 		todoList.append(todoElement);
 	};
+
+	const removeTodoElement = (e) => {
+		const todoElement = e.target.closest(".todo-item")
+		let data = {
+			id: todoElement.getAttribute("data-id")
+		}
+		todoElement.remove()
+		PubSub.publish("remove-todo", data);
+		updateDOMid(todoList)
+	}
 
 	const renderProjectTodo = (tag, data) => {
 		Array.from(todoList.children).forEach((el) => {
@@ -28,7 +40,12 @@ export const controllerDOM = (function () {
 	};
 
 	const todoExtend = (e) => {
-		if (e.target.getAttribute("type")) return;
+		if (
+			e.target.getAttribute("type") ||
+			e.target.getAttribute("class") === "fas fa-edit" ||
+			e.target.getAttribute("class") === "far fa-trash-alt"
+		)
+			return;
 
 		const todoItem = e.target.closest(".todo-item");
 		const expandDiv = todoItem.lastElementChild;
@@ -79,7 +96,7 @@ export const controllerDOM = (function () {
 		};
 		projectItem.remove();
 		PubSub.publish("remove-project", data);
-		updateDOMid();
+		updateDOMid(projectList);
 	};
 
 	const openRenameForm = (e) => {
@@ -149,9 +166,9 @@ export const controllerDOM = (function () {
 		}
 	};
 
-	const updateDOMid = () => {
-		Array.from(projectList.children).forEach((project, i) => {
-			project.setAttribute("data-id", i);
+	const updateDOMid = (list) => {
+		Array.from(list.children).forEach((item, i) => {
+			item.setAttribute("data-id", i);
 		});
 	};
 

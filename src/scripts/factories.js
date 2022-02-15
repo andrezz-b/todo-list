@@ -14,6 +14,15 @@ export const Project = (name, idNum) => {
 		_todoItems.push(todoItem);
 	};
 
+	const removeTodoItem = (tag, data) => {
+		const activeID = displayController.getActiveID();
+		if (activeID != _id) return;
+		_todoItems.splice(data.id, 1);
+		_todoItems.forEach((todoItem, i) => {
+			todoItem.setID(i);
+		});
+	};
+
 	const changeActive = () => {
 		_active = _active ? false : true;
 	};
@@ -36,14 +45,15 @@ export const Project = (name, idNum) => {
 
 	const getId = () => {
 		return _id;
-	}
+	};
 
 	const setId = (newId) => {
 		_id = newId;
-	}
+	};
 	PubSub.subscribe("add-new-todo", addTodoItem);
+	PubSub.subscribe("remove-todo", removeTodoItem)
 
-	return { name, getId, setId , getActive, changeActive, getTodoItems, setName, getName };
+	return { name, getId, setId, getActive, changeActive, getTodoItems, setName, getName };
 };
 
 export const todo = (data) => {
@@ -54,7 +64,12 @@ export const todo = (data) => {
 		return info;
 	};
 
+	const setID = (newID) => {
+		info.id = newID;
+	};
+
 	return {
 		getInfo,
+		setID,
 	};
 };
