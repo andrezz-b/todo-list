@@ -14,10 +14,20 @@ export const controllerDOM = (function () {
 		const removeTodoBtn = todoElement.querySelector(".remove-todo");
 		removeTodoBtn.addEventListener("click", removeTodoElement);
 		const id = todoList.childElementCount;
+		const checkbox = todoElement.querySelector("[type='checkbox']")
+		checkbox.addEventListener("click", todoChecked);
 		todoElement.setAttribute("data-id", id);
 		todoElement.addEventListener("click", todoExtend);
 		todoList.append(todoElement);
 	};
+
+	const todoChecked = (e) => {
+		const todoElement = e.target.closest(".todo-item")
+		let data = {
+			id: todoElement.getAttribute("data-id")
+		}
+		PubSub.publish("checked-todo", data);
+	}
 
 	const removeTodoElement = (e) => {
 		const todoElement = e.target.closest(".todo-item")

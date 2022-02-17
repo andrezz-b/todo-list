@@ -23,6 +23,16 @@ export const Project = (name, idNum) => {
 		});
 	};
 
+	const checkedTodoItem = (tag, data) => {
+		const activeID = displayController.getActiveID();
+		if (activeID != _id) return;
+		_todoItems.forEach(todo => {
+			if (todo.getInfo().id == data.id) {
+				todo.changeChecked();
+			}
+		})
+	}
+
 	const changeActive = () => {
 		_active = _active ? false : true;
 	};
@@ -52,6 +62,7 @@ export const Project = (name, idNum) => {
 	};
 	PubSub.subscribe("add-new-todo", addTodoItem);
 	PubSub.subscribe("remove-todo", removeTodoItem)
+	PubSub.subscribe("checked-todo", checkedTodoItem)
 
 	return { name, getId, setId, getActive, changeActive, getTodoItems, setName, getName };
 };
@@ -68,8 +79,13 @@ export const todo = (data) => {
 		info.id = newID;
 	};
 
+	const changeChecked = () => {
+		info.completed = info.completed ? false : true;
+	}
+
 	return {
 		getInfo,
 		setID,
+		changeChecked,
 	};
 };
