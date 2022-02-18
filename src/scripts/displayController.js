@@ -15,8 +15,6 @@ export const displayController = (() => {
 		activeID = data.id;
 		storage[activeID].changeActive();
 		PubSub.publish("new-active-project", data);
-		// Test
-		printActive()
 	};
 
 	const getActiveID = () => {
@@ -25,15 +23,6 @@ export const displayController = (() => {
 
 	const setActiveID = (newID) => {
 		activeID = newID;
-	}
-
-
-	// Test changing active status
-	const printActive = () => {
-		const storage = storageController.getStorage();
-		storage.forEach(el => {
-			if (el.getActive()) console.log(el, activeID)
-		})
 	}
 
 	return {

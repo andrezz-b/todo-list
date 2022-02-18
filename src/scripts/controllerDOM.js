@@ -25,18 +25,38 @@ export const controllerDOM = (function () {
 				{ input: divOverlay, open: divOverlay.getAttribute("data-open") },
 				{ input: newTodoForm, open: newTodoForm.getAttribute("data-open") }
 			);
+		} else {
+			newTodoForm.setAttribute("data-edit", "true");
+			formController.fillFormInput(newTodoForm, data);
+			toggleInput(
+				{ input: divOverlay, open: divOverlay.getAttribute("data-open") },
+				{ input: newTodoForm, open: newTodoForm.getAttribute("data-open") }
+			);
 		}
 	};
 
 	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
 		const removeTodoBtn = todoElement.querySelector(".remove-todo");
-		removeTodoBtn.addEventListener("click", removeTodoElement);
+		const renameTodoBtn = todoElement.querySelector(".rename-todo");
 		const id = todoList.childElementCount;
 		const checkbox = todoElement.querySelector("[type='checkbox']");
-		checkbox.addEventListener("click", todoChecked);
 		todoElement.setAttribute("data-id", id);
+
+		renameTodoBtn.addEventListener("click", function (e) {
+			const todoId = e.target.closest(".todo-item").getAttribute("data-id");
+			const todoItems = storageController
+				.getProject(displayController.getActiveID())
+				.getTodoItems();
+			const todoData = todoItems.find((todo) => {
+				if (todo.getInfo().id == todoId) return todo;
+			});
+			openTodoForm(todoData.getInfo());
+		});
+		removeTodoBtn.addEventListener("click", removeTodoElement);
+		checkbox.addEventListener("click", todoChecked);
 		todoElement.addEventListener("click", todoExtend);
+
 		todoList.append(todoElement);
 	};
 
@@ -46,6 +66,24 @@ export const controllerDOM = (function () {
 			id: todoElement.getAttribute("data-id"),
 		};
 		PubSub.publish("checked-todo", data);
+	};
+
+	const editTodoElement = (tag, data) => {
+		const todoElement = Array.from(todoList.children).find((el) => {
+			if (data.id == el.getAttribute("data-id")) return el;
+		});
+
+		const priority = todoElement.querySelector(".priority");
+		priority.setAttribute("class", `priority ${data.priority}`);
+
+		const title = todoElement.querySelector(".todo-title");
+		title.textContent = data.title;
+
+		const date = todoElement.querySelector(".due-date");
+		date.textContent = data.date;
+
+		const desc = todoElement.querySelector(".par--desc");
+		desc.textContent = data.desc;
 	};
 
 	const removeTodoElement = (e) => {
@@ -181,7 +219,8 @@ export const controllerDOM = (function () {
 	};
 
 	const closeForm = (e) => {
-		const form = e.target.closest("form");
+		const form = e.target ? e.target.closest("form") : e;
+		if (form.getAttribute("data-edit")) form.setAttribute("data-edit", "false");
 		toggleInput(
 			{
 				input: form,
@@ -227,6 +266,7 @@ export const controllerDOM = (function () {
 		PubSub.subscribe("change-active-project", updateProjectTitle);
 		PubSub.subscribe("change-project-name", updateProjectTitle);
 		PubSub.subscribe("new-active-project", renderProjectTodo);
+		PubSub.subscribe("edit-todo", editTodoElement);
 
 		newTodoBtn.addEventListener("click", function () {
 			openTodoForm();
@@ -240,6 +280,6 @@ export const controllerDOM = (function () {
 
 	return {
 		init,
-		toggleInput,
+		closeForm,
 	};
 })();

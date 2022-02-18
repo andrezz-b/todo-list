@@ -26,11 +26,21 @@ export const Project = (name, idNum) => {
 	const checkedTodoItem = (tag, data) => {
 		const activeID = displayController.getActiveID();
 		if (activeID != _id) return;
-		_todoItems.forEach(todo => {
+		_todoItems.forEach((todo) => {
 			if (todo.getInfo().id == data.id) {
 				todo.changeChecked();
 			}
-		})
+		});
+	};
+
+	const editTodoItem = (tag, data) => {
+		const activeID = displayController.getActiveID();
+		if (activeID != _id) return;
+		_todoItems.forEach((todo) => {
+			if (todo.getInfo().id == data.id) {
+				todo.setInfo(data);
+			}
+		});
 	}
 
 	const changeActive = () => {
@@ -61,14 +71,15 @@ export const Project = (name, idNum) => {
 		_id = newId;
 	};
 	PubSub.subscribe("add-new-todo", addTodoItem);
-	PubSub.subscribe("remove-todo", removeTodoItem)
-	PubSub.subscribe("checked-todo", checkedTodoItem)
+	PubSub.subscribe("remove-todo", removeTodoItem);
+	PubSub.subscribe("checked-todo", checkedTodoItem);
+	PubSub.subscribe("edit-todo", editTodoItem);
 
 	return { name, getId, setId, getActive, changeActive, getTodoItems, setName, getName };
 };
 
 export const todo = (data) => {
-	const info = data;
+	let info = data;
 	info.completed = false;
 
 	const getInfo = () => {
@@ -79,12 +90,17 @@ export const todo = (data) => {
 		info.id = newID;
 	};
 
+	const setInfo = (newInfo) => {
+		info = newInfo;
+	};
+
 	const changeChecked = () => {
 		info.completed = info.completed ? false : true;
-	}
+	};
 
 	return {
 		getInfo,
+		setInfo,
 		setID,
 		changeChecked,
 	};
