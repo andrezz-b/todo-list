@@ -54,7 +54,7 @@
 	padding-left: 1.25rem;
 	overflow: auto;
 	overflow-x: hidden;
-	height: 45%;
+	max-height: 20em;
 	width: 100%;
 
 	&::-webkit-scrollbar {

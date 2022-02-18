@@ -1,9 +1,15 @@
 @import "variables", "./reset.css", "./mixins";
 @import "mainDisplay.scss", "sidebar.scss";
 
+body {
+	@include flexCenter(column);
+	height: 100%;
+}
+
 header {
 	background-color: $clr-bg-dk;
 	color: $clr-ntrl-w;
+	width: 100%;
 
 	.title {
 		font-size: 2.5em;
@@ -15,7 +21,29 @@ header {
 
 main {
 	@include flexCenter(row);
-	height: 80%;
+	height: 95%;
 	width: 100%;
 	position: relative;
+}
+
+footer {
+	@include flexCenter;
+	width: 100%;
+	font-family: $ff-title;
+	padding: .5em 0;
+	background-color: $clr-bg-dk;
+	color: $clr-ntrl-w;
+
+	div {
+		@include flexCenter;
+	}
+
+	a {
+		@include flexCenter;
+		appearance: none;
+		text-decoration: none;
+		color: $clr-ntrl-w;
+		font-size: 1.3em;
+		padding-left: 1rem;
+	}
 }
