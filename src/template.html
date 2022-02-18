@@ -51,6 +51,7 @@
 				</div>
 			</div>
 			<div id="main-display">
+				<div class="overlay" data-open="false"></div>
 				<h1 class="title--main">Project 1</h1>
 				<div id="todo-list">
 					<!-- <div class="todo-item" data-expand="false">
@@ -62,7 +63,7 @@
 							<span class="rename-todo"><i class="fas fa-edit"></i></span>
 							<span class="remove-todo"><i class="far fa-trash-alt"></i></span>
 						</div>
-						<div class="hide">
+						<div class="expanded">
 							<div class="desc">
 								<h1 class="subtitle--desc">Description</h1>
 								<p class="par--desc">
@@ -83,7 +84,7 @@
 					</div> -->
 				</div>
 				<div class="new--todo">
-					<span><i class="fas fa-plus"></i></span>
+					<span id="new-todo-btn"><i class="fas fa-plus"></i></span>
 					<h1 class="subtitle">New task</h1>
 					<form id="todo-add" class="" data-open="false" action="#" autocomplete="off" onsubmit="return false"> 
 						<i class="fas fa-times"></i>
@@ -94,11 +95,11 @@
 						<input type="text", placeholder="Description" class="inputDesc" name="desc">
 						<div class="container--radio">
 							<h1>Priority:</h1>
-							<input type="radio" name="priority" value="high" id="priorHigh">
-							<input type="radio" name="priority" value="medium" id="priorMed" checked="checked">
 							<input type="radio" name="priority" value="low" id="priorLow">
+							<input type="radio" name="priority" value="medium" id="priorMed" checked="checked">
+							<input type="radio" name="priority" value="high" id="priorHigh">
 						</div>
-						<input type="submit" value="Add Task"/>
+						<input type="submit" value="Submit"/>
 					</form>
 				</div>
 			</div>

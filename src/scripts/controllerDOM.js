@@ -2,19 +2,38 @@ import { createTodoElement, createProjectElement } from "./createElement";
 import { storageController } from "./storageController";
 import PubSub from "pubsub-js";
 import { displayController } from "./displayController";
+import { formController } from "./formController";
 
 export const controllerDOM = (function () {
+	// New project form
 	const newProjectBtn = document.querySelector("#project-add-btn");
-	const cancelBtn = document.querySelectorAll(".cancel");
+	const cancelProjectForm = document.querySelector(".cancel");
+
+	// New todo form
+	const newTodoBtn = document.querySelector("#new-todo-btn");
+	const divOverlay = document.querySelector(".overlay");
+	const newTodoForm = document.querySelector("#todo-add");
+	const cancelTodoForm = newTodoForm.querySelector(".fas.fa-times");
+
+	//
 	const todoList = document.querySelector("#todo-list");
 	const projectList = document.querySelector("#project-list");
+
+	const openTodoForm = (data) => {
+		if (data === undefined) {
+			toggleInput(
+				{ input: divOverlay, open: divOverlay.getAttribute("data-open") },
+				{ input: newTodoForm, open: newTodoForm.getAttribute("data-open") }
+			);
+		}
+	};
 
 	const addTodoElement = (tag, data) => {
 		const todoElement = createTodoElement(data);
 		const removeTodoBtn = todoElement.querySelector(".remove-todo");
 		removeTodoBtn.addEventListener("click", removeTodoElement);
 		const id = todoList.childElementCount;
-		const checkbox = todoElement.querySelector("[type='checkbox']")
+		const checkbox = todoElement.querySelector("[type='checkbox']");
 		checkbox.addEventListener("click", todoChecked);
 		todoElement.setAttribute("data-id", id);
 		todoElement.addEventListener("click", todoExtend);
@@ -22,24 +41,25 @@ export const controllerDOM = (function () {
 	};
 
 	const todoChecked = (e) => {
-		const todoElement = e.target.closest(".todo-item")
+		const todoElement = e.target.closest(".todo-item");
 		let data = {
-			id: todoElement.getAttribute("data-id")
-		}
+			id: todoElement.getAttribute("data-id"),
+		};
 		PubSub.publish("checked-todo", data);
-	}
+	};
 
 	const removeTodoElement = (e) => {
-		const todoElement = e.target.closest(".todo-item")
+		const todoElement = e.target.closest(".todo-item");
 		let data = {
-			id: todoElement.getAttribute("data-id")
-		}
-		todoElement.remove()
+			id: todoElement.getAttribute("data-id"),
+		};
+		todoElement.remove();
 		PubSub.publish("remove-todo", data);
-		updateDOMid(todoList)
-	}
+		updateDOMid(todoList);
+	};
 
 	const renderProjectTodo = (tag, data) => {
+		// Rework
 		Array.from(todoList.children).forEach((el) => {
 			el.remove();
 		});
@@ -114,14 +134,14 @@ export const controllerDOM = (function () {
 		const form = projectItem.lastElementChild;
 		const open = form.getAttribute("data-open");
 		projectItem.classList.toggle("active");
-		toggleInput(form, open);
+		toggleInput({ input: form, open: open });
 	};
 
 	const renameProject = (e) => {
 		const form = e.target;
 		const projectItem = e.target.closest(".project-item");
 		projectItem.classList.toggle("active");
-		toggleInput(form, form.getAttribute("data-open"));
+		toggleInput({ input: form, open: form.getAttribute("data-open") });
 
 		let data = {
 			title: form["title"].value,
@@ -162,18 +182,23 @@ export const controllerDOM = (function () {
 
 	const displayInput = () => {
 		const addProjectForm = document.querySelector("#project-add");
-		const open = addProjectForm.getAttribute("data-open");
-		toggleInput(addProjectForm, open);
+		let formData = {
+			input: addProjectForm,
+			open: addProjectForm.getAttribute("data-open"),
+		};
+		toggleInput(formData);
 	};
 
-	const toggleInput = (input, open) => {
-		if (open === "true") {
-			input.classList.remove("open");
-			input.setAttribute("data-open", "false");
-		} else {
-			input.classList.add("open");
-			input.setAttribute("data-open", "true");
-		}
+	const toggleInput = (...data) => {
+		data.forEach((el) => {
+			if (el.open === "true") {
+				el.input.classList.remove("open");
+				el.input.setAttribute("data-open", "false");
+			} else {
+				el.input.classList.add("open");
+				el.input.setAttribute("data-open", "true");
+			}
+		});
 	};
 
 	const updateDOMid = (list) => {
@@ -189,11 +214,23 @@ export const controllerDOM = (function () {
 		PubSub.subscribe("change-project-name", updateProjectTitle);
 		PubSub.subscribe("new-active-project", renderProjectTodo);
 
-		cancelBtn.forEach((btn) => {
+		newTodoBtn.addEventListener("click", function () {
+			openTodoForm();
+		});
+		[cancelProjectForm, cancelTodoForm].forEach((btn) => {
 			btn.addEventListener("click", function (e) {
 				const form = e.target.closest("form");
-				const open = form.getAttribute("data-open");
-				toggleInput(form, open);
+				toggleInput(
+					{
+						input: form,
+						open: form.getAttribute("data-open"),
+					},
+					{
+						input: divOverlay,
+						open: "true",
+					}
+				);
+				formController.resetFormInput(form);
 			});
 		});
 		newProjectBtn.addEventListener("click", displayInput);

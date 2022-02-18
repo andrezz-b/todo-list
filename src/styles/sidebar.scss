@@ -70,7 +70,6 @@
 	.project-item {
 		position: relative;
 		cursor: pointer;
-		z-index: 10;
 		padding: 0.35em 0.5em;
 		display: grid;
 		width: 93%;
@@ -142,6 +141,7 @@
 	right: -105%;
 	width: 100%;
 	transform: scale(0);
+	z-index: 5;
 	
 	font-family: $ff-title;
 	font-size: .9em;

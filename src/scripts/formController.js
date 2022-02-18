@@ -21,19 +21,36 @@ export const formController = (function () {
 				data.priority = el.value;
 			}
 		});
+		controllerDOM.toggleInput(
+			{ input: newTodoForm, open: "true" },
+			{ input: document.querySelector(".overlay"), open: "true" }
+		);
 
+		resetFormInput(newTodoForm);
 		PubSub.publish("add-new-todo", data);
 	};
 
 	const addNewProject = () => {
 		let data = {};
 		data.title = newProjectForm.elements["title"].value;
-		controllerDOM.toggleInput(newProjectForm, "true");
-
+		controllerDOM.toggleInput({ input: newProjectForm, open: "true" });
+		resetFormInput(newProjectForm);
 		PubSub.publish("add-new-project", data);
+	};
+
+	const resetFormInput = (form) => {
+		const formElements = Array.from(form.elements);
+		formElements.forEach((el) => {
+			if (el.type === "text" || el.type === "date") {
+				el.value = "";
+			} else if (el.type === "radio" && el.value === "medium") {
+				el.checked = true;
+			}
+		});
 	};
 
 	return {
 		init,
+		resetFormInput,
 	};
 })();

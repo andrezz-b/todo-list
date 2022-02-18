@@ -6,6 +6,7 @@
 	width: 100%;
 	padding: 3em 12em;
 	background-color: $clr-bg-lt;
+	position: relative;
 
 	.title--main {
 		@include subTitle;
@@ -236,19 +237,41 @@
 	}
 }
 
+.overlay {
+	z-index: -1;
+	position: absolute;
+	backdrop-filter: blur(2px);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transform: scale(0);
+
+	&.open {
+		z-index: 100;
+		transform: scale(1);
+	}
+}
+
 #todo-add {
 	@include flexCenter(column);
 	font-size: 1.1em;
+	z-index: 101;
 	row-gap: 1rem;
 	border: 2px solid $clr-border-sep;
 	width: 30em;
 	border-radius: 10px;
 	padding: 2.25em 2em 1em 2em;
 	position: absolute;
-	top: 80%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	top: 30%;
+	left: 30%;
 	background-color: $clr-bg-input;
+	transition: transform 300ms ease-in-out;
+	transform: scale(0);
+
+	&.open {
+		transform: scale(1);
+	}
 
 	.fa-times {
 		position: absolute;
