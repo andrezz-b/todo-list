@@ -180,13 +180,27 @@ export const controllerDOM = (function () {
 		}
 	};
 
+	const closeForm = (e) => {
+		const form = e.target.closest("form");
+		toggleInput(
+			{
+				input: form,
+				open: form.getAttribute("data-open"),
+			},
+			{
+				input: divOverlay,
+				open: "true",
+			}
+		);
+		formController.resetFormInput(form);
+	};
+
 	const displayInput = () => {
 		const addProjectForm = document.querySelector("#project-add");
-		let formData = {
+		toggleInput({
 			input: addProjectForm,
 			open: addProjectForm.getAttribute("data-open"),
-		};
-		toggleInput(formData);
+		});
 	};
 
 	const toggleInput = (...data) => {
@@ -218,20 +232,7 @@ export const controllerDOM = (function () {
 			openTodoForm();
 		});
 		[cancelProjectForm, cancelTodoForm].forEach((btn) => {
-			btn.addEventListener("click", function (e) {
-				const form = e.target.closest("form");
-				toggleInput(
-					{
-						input: form,
-						open: form.getAttribute("data-open"),
-					},
-					{
-						input: divOverlay,
-						open: "true",
-					}
-				);
-				formController.resetFormInput(form);
-			});
+			btn.addEventListener("click", closeForm);
 		});
 		newProjectBtn.addEventListener("click", displayInput);
 		addProjectElement(undefined, { title: "Project 1" });
